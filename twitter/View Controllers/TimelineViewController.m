@@ -26,6 +26,9 @@
                 NSString *text = dictionary[@"text"];
                 NSLog(@"%@", text);
             }
+            
+            //stored the tweet data and display it
+            
         } else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
