@@ -10,8 +10,8 @@
 #import "Tweet.h"
 
 static NSString * const baseURLString = @"https://api.twitter.com";
-static NSString * const consumerKey = @"VXkXAalfL45vXRue6AV2IQ3g7";
-static NSString * const consumerSecret = @"UcSQE7LBOKWx5kqHtuO8WjkpTCwQ8VO2mlZxuVxn3Fak29PTfh";
+static NSString * const consumerKey = @"5lUJuO5AUpPUCez4ewYDFrtgh";
+static NSString * const consumerSecret = @"s5ynGqXzstUZwFPxVyMDkYh197qvHOcVM3kwv1o2TKhS1avCdS";
 @interface APIManager()
 
 @end
