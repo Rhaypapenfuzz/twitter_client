@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 // MARK: Properties
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *screenName;
+@property (strong, nonatomic) NSString *imageURL;
 //...
 // Add any additional properties here
 
