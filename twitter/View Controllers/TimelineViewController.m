@@ -11,25 +11,28 @@
 #import "Tweet.h"
 #import "TweetCell.h"
 #import "UIImageview+AFNetworking.h"
+#import "ComposeViewController.h"
 
-@interface TimelineViewController ()<UITableViewDelegate, UITableViewDataSource>
+@interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tweetView;
-@property (nonatomic, strong) NSArray *tweets; //Add a property for the array of tweets and set it when the network call succeeds.
-//Similar to the Flixster app, implement the UITableViewDataSource methods.
-//@property(nonatomic,strong) N
+@property (nonatomic, strong) NSMutableArray *tweets; //Add a property for the array of tweets and set it when the network call succeeds.
+@property (nonatomic, strong) UIRefreshControl *refreshcontrol;
+
 @end
 
 @implementation TimelineViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-     //UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    
-    
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(beginRefresh:) forControlEvents:UIControlEventValueChanged];
+    [self.tweetView insertSubview:refreshControl atIndex:0];
+
+    //[refreshControl BERefreshing];
     self.tweetView.dataSource = self; //view controller becomes its own dataSource
     self.tweetView.delegate = self;  //view controller becomes its own delegate
     self.tweetView.rowHeight = 180;
-    // self.Tweet =[[NSMutableArray alloc] init];
+ 
     // Get timeline
     [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweets, NSError *error) {//make an API request
         if (tweets) {
@@ -37,13 +40,10 @@
             self.tweets = tweets;
             [self.tweetView reloadData]; //reload tableView
             NSLog(@"😎😎😎 Successfully loaded home timeline");
-            for (Tweet *tweet in tweets) {
-                NSString *text = tweet.text; //dictionary[@"text"];
-                NSLog(@"%@", text);
-            }
         } else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
+        
     }];
 }
 
@@ -51,33 +51,41 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+- (void)makeAPIRequest {
+
+    // Get timeline
+    [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweets, NSError *error) {//make an API request
+        if (tweets) {
+            //stored the tweet data and display it
+            self.tweets = tweets;
+            [self.tweetView reloadData]; //reload tableView
+            NSLog(@"😎😎😎 Successfully loaded home timeline");
+//           for (Tweet *tweet in tweets) {
+//                NSString *text = tweet.text; //dictionary[@"text"];
+//                NSLog(@"%@", text);
+//            }
+        } else {
+            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+        }
+        [self.tweetView reloadData];
+        
+        [self.refreshcontrol endRefreshing]; // Tell the refreshControl to stop spinning
+    }];
+}
+
 // Makes a network request to get updated data
 // Updates the tableView with the new data
 // Hides the RefreshControl
-//- (void)beginRefresh:(UIRefreshControl *)refreshControl {
-//
-//    // Create NSURL and NSURLRequest
-//
-//    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]
-//                delegate:nil
-//                delegateQueue:[NSOperationQueue mainQueue]];
-//    session.configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
-//
-//    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
-//            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-//
-//            // ... Use the new data to update the data source ...
-//
-//            // Reload the tableView now that there is new data
-//            [self.tableView reloadData];
-//
-//            // Tell the refreshControl to stop spinning
-//            [refreshControl endRefreshing];
-//
-//        }];
-//
-//    [task resume];
-//}
+- (void)beginRefresh:(UIRefreshControl *)refreshControl {
+
+    // Create NSURL and NSURLRequest
+        [self makeAPIRequest] ;
+    
+    // ... Use the new data to update the data source ...
+    
+}
 /*
 #pragma mark - Navigation
 
@@ -112,7 +120,15 @@
     return self.tweets.count;
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    UINavigationController *navigationController = [segue destinationViewController];
+    ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
+    composeController.delegate = self;
+}
+- (void)didTweet:(Tweet *)tweet{
+    [self.tweets insertObject:tweet atIndex:0];
+    [self.tweetView reloadData];
 
-
+}
 
 @end

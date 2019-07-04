@@ -8,13 +8,12 @@
 
 #import "BDBOAuth1SessionManager.h"
 #import "BDBOAuth1SessionManager+SFAuthenticationSession.h"
-
+#import "Tweet.h"
 @interface APIManager : BDBOAuth1SessionManager
 
 + (instancetype)shared;
 
 - (void)getHomeTimelineWithCompletion:(void(^)(NSArray *tweets, NSError *error))completion;
+- (void)postStatusWithText:(NSString *)text completion:(void (^)(Tweet *, NSError *))completion;
 //but as you want to support other API requests to get a users timeline, favorite a tweet, retweet, add a function for each API request.
-//- (void)getUserTimelineWithCompletion:(void(^)(NSArray *tweets, NSError *error))completion;
-
 @end
