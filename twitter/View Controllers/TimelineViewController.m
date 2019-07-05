@@ -12,11 +12,14 @@
 #import "TweetCell.h"
 #import "UIImageview+AFNetworking.h"
 #import "ComposeViewController.h"
+#import "LoginViewController.h"
+#import "AppDelegate.h"
 
 @interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tweetView;
-@property (nonatomic, strong) NSMutableArray *tweets; //Add a property for the array of tweets and set it when the network call succeeds.
+@property (nonatomic, strong) NSMutableArray *tweets;
 @property (nonatomic, strong) UIRefreshControl *refreshcontrol;
+- (IBAction)logOutButton:(id)sender;
 
 @end
 
@@ -28,7 +31,7 @@
     [refreshControl addTarget:self action:@selector(beginRefresh:) forControlEvents:UIControlEventValueChanged];
     [self.tweetView insertSubview:refreshControl atIndex:0];
 
-    //[refreshControl BERefreshing];
+    //[refreshControl beginRefreshing];
     self.tweetView.dataSource = self; //view controller becomes its own dataSource
     self.tweetView.delegate = self;  //view controller becomes its own delegate
     self.tweetView.rowHeight = 180;
@@ -37,7 +40,7 @@
     [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweets, NSError *error) {//make an API request
         if (tweets) {
             //stored the tweet data and display it
-            self.tweets = tweets;
+            self.tweets = (NSMutableArray *) tweets;
             [self.tweetView reloadData]; //reload tableView
             NSLog(@"😎😎😎 Successfully loaded home timeline");
         } else {
@@ -59,7 +62,7 @@
     [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweets, NSError *error) {//make an API request
         if (tweets) {
             //stored the tweet data and display it
-            self.tweets = tweets;
+            self.tweets = (NSMutableArray *)tweets;
             [self.tweetView reloadData]; //reload tableView
             NSLog(@"😎😎😎 Successfully loaded home timeline");
 //           for (Tweet *tweet in tweets) {
@@ -69,21 +72,17 @@
         } else {
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
-        [self.tweetView reloadData];
+        [self.tweetView reloadData]; // Updates the tableView with the new data
         
         [self.refreshcontrol endRefreshing]; // Tell the refreshControl to stop spinning
     }];
 }
 
 // Makes a network request to get updated data
-// Updates the tableView with the new data
-// Hides the RefreshControl
 - (void)beginRefresh:(UIRefreshControl *)refreshControl {
 
     // Create NSURL and NSURLRequest
         [self makeAPIRequest] ;
-    
-    // ... Use the new data to update the data source ...
     
 }
 /*
@@ -108,6 +107,7 @@
     NSURL *URL = [NSURL URLWithString:profileURL];
     [cell.profilePicture setImageWithURL:URL];
 
+    cell.tweet = tweet;
     cell.tweetTextLabel.text = [NSString stringWithFormat:@"%@", tweet.text]; //tweet text
     cell.retweetCountLabel.text = [NSString stringWithFormat:@"%d", tweet.retweetCount]; //retweet count
     cell.likesCountLabel.text = [NSString stringWithFormat:@"%d", tweet.favoriteCount]; // likes count
@@ -131,4 +131,12 @@
 
 }
 
+- (IBAction)logOutButton:(id)sender {
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    appDelegate.window.rootViewController = loginViewController;
+    [[APIManager shared] logout];
+}
 @end

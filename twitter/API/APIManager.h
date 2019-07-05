@@ -15,5 +15,11 @@
 
 - (void)getHomeTimelineWithCompletion:(void(^)(NSArray *tweets, NSError *error))completion;
 - (void)postStatusWithText:(NSString *)text completion:(void (^)(Tweet *, NSError *))completion;
-//but as you want to support other API requests to get a users timeline, favorite a tweet, retweet, add a function for each API request.
+- (void)favorite:(Tweet *)tweet completion:(void (^)(Tweet *, NSError *))completion;
+/*
+- (void)unFavorite:(Tweet *)tweet completion:(void (^)(Tweet *, NSError *))completion;
+- (void)retweet:(Tweet *)tweet completion:(void (^)(Tweet *, NSError *))completion;
+- (void)unRetweet:(Tweet *)tweet completion:(void (^)(Tweet *, NSError *))completion;
+*/
+// support other API requests to get a users timeline, favorite a tweet, retweet, add a function for each API request.
 @end
