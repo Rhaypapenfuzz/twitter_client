@@ -11,6 +11,7 @@
 
 @interface profilePicViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *profilePicture;
+- (IBAction)cancelButtonAction:(id)sender;
 
 @end
 
@@ -37,4 +38,7 @@
     // Pass the selected object to the new view controller.
 }
  */
+- (IBAction)cancelButtonAction:(id)sender {
+    [self dismissViewControllerAnimated:true completion:nil];
+}
 @end

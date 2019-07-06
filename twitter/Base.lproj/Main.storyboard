@@ -304,7 +304,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="F4K-JW-kLa"/>
                     </view>
-                    <navigationItem key="navigationItem" id="niM-Ol-fMv"/>
+                    <navigationItem key="navigationItem" id="niM-Ol-fMv">
+                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="6sr-Xe-CDS">
+                            <connections>
+                                <action selector="cancelButtonAction:" destination="2cd-TG-PrB" id="80t-2j-gRL"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="profilePicture" destination="EWA-da-CNq" id="fCV-dO-fqs"/>
                     </connections>
@@ -392,7 +398,7 @@
                     <navigationItem key="navigationItem" title="Reply" id="X6E-XW-SXT">
                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="5uj-jq-xa4">
                             <connections>
-                                <action selector="CancelButtonAction:" destination="E8f-Hf-iUm" id="stb-TX-r1b"/>
+                                <action selector="cancelButtonAction:" destination="E8f-Hf-iUm" id="SkM-do-1cz"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Reply" id="shF-tv-FLo">

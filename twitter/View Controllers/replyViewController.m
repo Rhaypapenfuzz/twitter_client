@@ -18,6 +18,9 @@
 
 @end
 @implementation replyViewController
+- (IBAction)cancelButtonAction:(id)sender {
+     [self dismissViewControllerAnimated:true completion:nil];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

@@ -116,6 +116,9 @@
     NSURL *URL = [NSURL URLWithString:profileURL];
     [cell.profilePicture setImageWithURL:URL];
 
+    // Tap gesture
+    
+    
     cell.tweet = tweet;
     cell.tweetTextLabel.text = [NSString stringWithFormat:@"%@", tweet.text]; //tweet text
     cell.retweetCountLabel.text = [NSString stringWithFormat:@"%d", tweet.retweetCount]; //retweet count
@@ -125,6 +128,11 @@
     // cell.commentCountLabel.text = tweet.    commentCount;
     return cell;
     }
+
+// didTapCellImage
+// get the NSIndexPath
+// self.index = indexPath.row
+// programaitcally performSegueWithIdentifier
 
 - (NSInteger)tableView:( nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.tweets.count;
@@ -137,10 +145,14 @@
         ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
         composeController.delegate = self;
     }
-    else if ([[segue identifier] isEqualToString:@"profileSegue]"]) {
+    else if ([[segue identifier] isEqualToString:@"profileSegue"]) {
         UINavigationController *navigationController = [segue destinationViewController];
         profilePicViewController *profilePicController = (profilePicViewController*) navigationController.topViewController;
-         profilePicController.delegate = self;
+         //profilePicController.delegate = self;
+        UITableViewCell *tappedCell = sender;
+        NSIndexPath *indexPath = [self.tweetView indexPathForCell:tappedCell];
+        Tweet *tweet = self.tweets[self.index];
+        profilePicController.tweet.user = tweet.user;
     }
     
 //    if([[segue identifier] isEqualToString:@"destination"]) {
