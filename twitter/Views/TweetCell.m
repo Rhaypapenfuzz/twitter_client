@@ -15,18 +15,29 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+    
+    UITapGestureRecognizer *profileTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(didTapUserProfile:)];
+    [self.profilePicture addGestureRecognizer:profileTapGestureRecognizer];
+    [self.profilePicture setUserInteractionEnabled:YES];
+    
     // Initialization code
     [self.favoriteButton setImage:[UIImage imageNamed:@"favor-icon"] forState:UIControlStateNormal];
     [self.favoriteButton setImage:[UIImage imageNamed:@"favor-icon-red"] forState:UIControlStateSelected];
-
+    
+    [self.retweetButton setImage:[UIImage imageNamed:@"retweet-icon"] forState:UIControlStateNormal];
+    [self.retweetButton setImage:[UIImage imageNamed:@"retweet-icon-green"] forState:UIControlStateSelected];
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
     // Configure the view for the selected state
 }
+- (void) didTapUserProfile:(UITapGestureRecognizer *)sender{
+    [self.delegate tweetCell:self didTap:self.tweet.user];
+}
 
-- (IBAction)didTapFavorite:(id)sender {
+- (IBAction)tapFavoriteAction:(id)sender {
     if(self.tweet.favorited){
         self.favoriteButton.selected = NO;
         self.tweet.favorited = NO;
@@ -55,11 +66,44 @@
         
     }
     [self refreshData];
+    
 }
+
+- (IBAction)tapRetweetAction:(id)sender {
+    if(self.tweet.retweeted){
+        self.retweetButton.selected = NO;
+        self.tweet.retweeted = NO;
+        self.tweet.retweetCount -= 1;
+        [[APIManager shared] retweet:self.tweet completion:^(Tweet *tweet, NSError *error) {
+            if(error){
+                NSLog(@"Error retweeting tweet: %@", error.localizedDescription);
+            }
+            else{
+                NSLog(@"Successfully retweeted the following Tweet: %@", tweet.text);
+            }
+        }];
+    }
+    else{
+        self.retweetButton.selected = YES;
+        self.tweet.retweeted= YES;
+        self.tweet.retweetCount += 1;
+        [[APIManager shared] retweet:self.tweet completion:^(Tweet *tweet, NSError *error) {
+            if(error){
+                NSLog(@"Error retweeting tweet: %@", error.localizedDescription);
+            }
+            else{
+                NSLog(@"Successfully retweeted the following Tweet: %@", tweet.text);
+            }
+        }];
+        
+    }
+    [self refreshData];
+    
+}
+
 -(void) refreshData{
     
-  
-    //self.tweet = _tweet;
+
     self.authorLabel.text = self.tweet.user.name; //user name
     self.AuthorNicknameLabel.text = self.tweet.user.screenName; // user nickname
     self.dateLabel.text = self.tweet.createdAtString;
@@ -72,8 +116,10 @@
     self.tweetTextLabel.text = [NSString stringWithFormat:@"%@", self.tweet.text]; //tweet text
     self.retweetCountLabel.text = [NSString stringWithFormat:@"%d", self.tweet.retweetCount]; //retweet count
     self.likesCountLabel.text = [NSString stringWithFormat:@"%d", self.tweet.favoriteCount]; // likes count
-   
-}
 
+}
+- (IBAction)tapReplyAction:(id)sender {
+    NSString *tweedID = self.tweet.idStr;
     
+}
 @end

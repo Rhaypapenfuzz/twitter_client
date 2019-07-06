@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E2F42D022D00D520065BACC /* replyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E2F42CF22D00D520065BACC /* replyViewController.m */; };
+		0E2F42D322D026540065BACC /* profilePicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E2F42D222D026540065BACC /* profilePicViewController.m */; };
 		0EEE79BC22CAD65C00F19DA5 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EEE79BB22CAD65C00F19DA5 /* User.m */; };
 		0EEE79BF22CAD80900F19DA5 /* Tweet.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EEE79BE22CAD80900F19DA5 /* Tweet.m */; };
 		0EEE79C222CC032100F19DA5 /* TweetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EEE79C122CC032100F19DA5 /* TweetCell.m */; };
@@ -24,6 +26,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0E2F42CE22D00D520065BACC /* replyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = replyViewController.h; sourceTree = "<group>"; };
+		0E2F42CF22D00D520065BACC /* replyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = replyViewController.m; sourceTree = "<group>"; };
+		0E2F42D122D026540065BACC /* profilePicViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = profilePicViewController.h; sourceTree = "<group>"; };
+		0E2F42D222D026540065BACC /* profilePicViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = profilePicViewController.m; sourceTree = "<group>"; };
 		0EEE79BA22CAD65C00F19DA5 /* User.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		0EEE79BB22CAD65C00F19DA5 /* User.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		0EEE79BD22CAD80900F19DA5 /* Tweet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tweet.h; sourceTree = "<group>"; };
@@ -145,6 +151,10 @@
 				6AD2790820BCC04D0085BC29 /* TimelineViewController.m */,
 				0EEE79C622CD5B5200F19DA5 /* ComposeViewController.h */,
 				0EEE79C722CD5B5200F19DA5 /* ComposeViewController.m */,
+				0E2F42D122D026540065BACC /* profilePicViewController.h */,
+				0E2F42D222D026540065BACC /* profilePicViewController.m */,
+				0E2F42CE22D00D520065BACC /* replyViewController.h */,
+				0E2F42CF22D00D520065BACC /* replyViewController.m */,
 				0EEE79BA22CAD65C00F19DA5 /* User.h */,
 				0EEE79BB22CAD65C00F19DA5 /* User.m */,
 				0EEE79BD22CAD80900F19DA5 /* Tweet.h */,
@@ -255,6 +265,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0EEE79C222CC032100F19DA5 /* TweetCell.m in Sources */,
+				0E2F42D322D026540065BACC /* profilePicViewController.m in Sources */,
 				6AD278F320BCA6020085BC29 /* BDBOAuth1SessionManager+SFAuthenticationSession.m in Sources */,
 				0EEE79BC22CAD65C00F19DA5 /* User.m in Sources */,
 				0EEE79C822CD5B5200F19DA5 /* ComposeViewController.m in Sources */,
@@ -263,6 +274,7 @@
 				6AD2790620BCC0380085BC29 /* LoginViewController.m in Sources */,
 				6AD278DA20BC4B950085BC29 /* AppDelegate.m in Sources */,
 				6AD278F620BCB68B0085BC29 /* APIManager.m in Sources */,
+				0E2F42D022D00D520065BACC /* replyViewController.m in Sources */,
 				6AD2790920BCC04D0085BC29 /* TimelineViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

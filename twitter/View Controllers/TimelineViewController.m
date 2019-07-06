@@ -13,12 +13,15 @@
 #import "UIImageview+AFNetworking.h"
 #import "ComposeViewController.h"
 #import "LoginViewController.h"
+#import "replyViewController.h"
 #import "AppDelegate.h"
+#import "profilePicViewController.h"
 
-@interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface TimelineViewController () <ComposeViewControllerDelegate, ReplyViewControllerDelegate, TweetCellDelegate, UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tweetView;
 @property (nonatomic, strong) NSMutableArray *tweets;
 @property (nonatomic, strong) UIRefreshControl *refreshcontrol;
+@property (nonatomic) NSInteger index;
 - (IBAction)logOutButton:(id)sender;
 
 @end
@@ -50,11 +53,16 @@
     }];
 }
 
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
+- (void)tweetCell:(TweetCell *) tweetCell didTap: (User *)user{
+    [self performSegueWithIdentifier:@"profileSegue" sender:user];
+    
+}
 
 - (void)makeAPIRequest {
 
@@ -100,6 +108,7 @@
     TweetCell *cell = [self.tweetView dequeueReusableCellWithIdentifier:@"TweetCell"];
     Tweet *tweet  = self.tweets[indexPath.row];
     
+    cell.delegate = self;
     cell.authorLabel.text = tweet.user.name; //user name
     cell.AuthorNicknameLabel.text = tweet.user.screenName; // user nickname
 
@@ -112,6 +121,7 @@
     cell.retweetCountLabel.text = [NSString stringWithFormat:@"%d", tweet.retweetCount]; //retweet count
     cell.likesCountLabel.text = [NSString stringWithFormat:@"%d", tweet.favoriteCount]; // likes count
     cell.dateLabel.text = tweet.createdAtString;
+    
     // cell.commentCountLabel.text = tweet.    commentCount;
     return cell;
     }
@@ -121,10 +131,29 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    UINavigationController *navigationController = [segue destinationViewController];
-    ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
-    composeController.delegate = self;
+    if([[segue identifier] isEqualToString:@"composeSegue"]) {
+
+        UINavigationController *navigationController = [segue destinationViewController];
+        ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
+        composeController.delegate = self;
+    }
+    else if ([[segue identifier] isEqualToString:@"profileSegue]"]) {
+        UINavigationController *navigationController = [segue destinationViewController];
+        profilePicViewController *profilePicController = (profilePicViewController*) navigationController.topViewController;
+         profilePicController.delegate = self;
+    }
+    
+//    if([[segue identifier] isEqualToString:@"destination"]) {
+//        replyViewController *replyController = [[replyViewController alloc] init];
+//        UITableViewCell *tappedCell = sender;
+//        NSIndexPath *indexPath = [self.tweetView indexPathForCell:tappedCell];
+//        Tweet *tweet = self.tweets[indexPath.row];
+//        replyController.replyToTweet = tweet;
+//        replyController.delegate = self;
+//    }
 }
+
+
 - (void)didTweet:(Tweet *)tweet{
     [self.tweets insertObject:tweet atIndex:0];
     [self.tweetView reloadData];
@@ -138,5 +167,11 @@
     LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
     appDelegate.window.rootViewController = loginViewController;
     [[APIManager shared] logout];
+}
+
+- (void)didReply:(Tweet *)tweet{
+    [self.tweets insertObject:tweet atIndex:0];
+    [self.tweetView reloadData];
+    
 }
 @end

@@ -8,10 +8,13 @@
 
 #import "APIManager.h"
 #import "Tweet.h"
+#import "TimelineViewController.h"
+
+
 
 static NSString * const baseURLString = @"https://api.twitter.com";
-static NSString * const consumerKey = @"5lUJuO5AUpPUCez4ewYDFrtgh";
-static NSString * const consumerSecret = @"s5ynGqXzstUZwFPxVyMDkYh197qvHOcVM3kwv1o2TKhS1avCdS";
+static NSString * const consumerKey = @"VXkXAalfL45vXRue6AV2IQ3g7";
+static NSString * const consumerSecret = @"UcSQE7LBOKWx5kqHtuO8WjkpTCwQ8VO2mlZxuVxn3Fak29PTfh";
 @interface APIManager()
 
 @end
@@ -75,6 +78,7 @@ static NSString * const consumerSecret = @"s5ynGqXzstUZwFPxVyMDkYh197qvHOcVM3kwv
        completion(tweetDictionaries, error);
    }];
 }
+
 //post tweet class
 - (void)postStatusWithText:(NSString *)text completion:(void (^)(Tweet *, NSError *))completion{
     NSString *urlString = @"1.1/statuses/update.json";
@@ -87,6 +91,8 @@ static NSString * const consumerSecret = @"s5ynGqXzstUZwFPxVyMDkYh197qvHOcVM3kwv
         completion(nil, error);
     }];
 }
+
+//like tweet
 - (void)favorite:(Tweet *)tweet completion:(void (^)(Tweet * tweet, NSError * error))completion{
     
     NSString *urlString = @"1.1/favorites/create.json";
@@ -98,5 +104,35 @@ static NSString * const consumerSecret = @"s5ynGqXzstUZwFPxVyMDkYh197qvHOcVM3kwv
         completion(nil, error);
     }];
 }
+
+//retweet a tweet
+- (void)retweet:(Tweet *)tweet completion:(void (^)(Tweet *tweet, NSError *error))completion {
+    
+    //NSString *urlString =  nil;
+    NSString *urlString = [NSString stringWithFormat:@"1.1/statuses/retweet/%@.json",tweet.idStr];
+    NSDictionary *parameters = @{@"id": tweet.idStr};
+    [self POST:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
+        Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
+        completion(tweet, nil);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        completion(nil, error);
+    }];
+
+}
+
+//post tweet class
+- (void)replyWithText:(NSString *)text andTweetID:(NSString *)idStr completion:(void (^)(Tweet *, NSError *))completion{
+    //get tweet id and concatenate
+    NSString *urlString = @"1.1/statuses/update.json";
+    NSDictionary *parameters = @{@"status":text, @"in_reply_to_status_id" :idStr };
+    
+    [self POST:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
+        Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
+        completion(tweet, nil);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        completion(nil, error);
+    }];
+}
+
 
 @end
